@@ -1,7 +1,12 @@
+import { useEffect } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import '../lib/leafletFix'
 
 export default function BuildingsMap({ buildings }) {
+  useEffect(() => {
+    // Import leaflet fix ONLY in browser
+    import('../lib/leafletFix')
+  }, [])
+
   const valid = buildings.filter(
     b => b.latitude && b.longitude
   )
