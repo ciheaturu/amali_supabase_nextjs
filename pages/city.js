@@ -1,5 +1,12 @@
+import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+
+// Load the map component client‑side only
+const BuildingsMap = dynamic(
+  () => import('../components/BuildingsMap'),
+  { ssr: false }
+)
 
 export default function City() {
   const [buildings, setBuildings] = useState([])
@@ -16,8 +23,9 @@ export default function City() {
     if (!error) setBuildings(data || [])
   }
 
-  // Simple summaries
+  // Summaries
   const total = buildings.length
+
   const byType = buildings.reduce((acc, b) => {
     acc[b.classification] = (acc[b.classification] || 0) + 1
     return acc
@@ -35,7 +43,11 @@ export default function City() {
       <p><strong>Total buildings:</strong> {total}</p>
       <p><strong>Total occupants (approx):</strong> {totalOccupants}</p>
 
-      {/* ⬇⬇ INSERTED EXPORT BUTTON HERE ⬇⬇ */}
+      {/* MAP SECTION */}
+      <h3>Building locations</h3>
+      <BuildingsMap buildings={buildings} />
+
+      {/* EXPORT BUTTON */}
       <button
         onClick={() => {
           const header = "name,classification,occupants,latitude,longitude\n"
@@ -54,10 +66,16 @@ export default function City() {
       >
         ⬇ Export CSV
       </button>
-      {/* ⬆⬆ END OF INSERTED BUTTON ⬆⬆ */}
 
       <br /><br />
       <a href="/add-building">➕ Add building</a>
+
+      <h3>Buildings by type</h3>
+      <ul>
+        {Object.entries(byType).map(([type, count]) => (
+          <li key={type}>{type}: {count}</li>
+        ))}
+      </ul>
 
       <h3>All buildings</h3>
       <ul>
