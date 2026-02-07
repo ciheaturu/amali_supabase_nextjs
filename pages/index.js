@@ -13,7 +13,7 @@ export default function Home() {
       options: {
         data: {
           city,
-          role: "city"   // default role for normal users
+          role: "city"
         }
       }
     })
@@ -33,10 +33,8 @@ export default function Home() {
       return
     }
 
-    // Fetch the logged‑in user
     const { data: { user } } = await supabase.auth.getUser()
 
-    // Redirect based on role
     if (user?.user_metadata?.role === "admin") {
       window.location.href = "/admin"
     } else {
@@ -45,29 +43,33 @@ export default function Home() {
   }
 
   return (
-    <div style={{ padding: 40 }}>
-      <h1>City Building App</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div>
+        <h1 className="text-3xl font-bold text-indigo-600">
+          City Building App
+        </h1>
 
-      <input
-        placeholder="City name (signup only)"
-        onChange={e => setCity(e.target.value)}
-      />
+        <input
+          placeholder="City name (signup only)"
+          onChange={e => setCity(e.target.value)}
+        />
 
-      <input
-        placeholder="Email"
-        onChange={e => setEmail(e.target.value)}
-      />
+        <input
+          placeholder="Email"
+          onChange={e => setEmail(e.target.value)}
+        />
 
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={e => setPassword(e.target.value)}
-      />
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={e => setPassword(e.target.value)}
+        />
 
-      <br /><br />
+        <br /><br />
 
-      <button onClick={signUp}>Sign up</button>
-      <button onClick={login}>Login</button>
+        <button onClick={signUp}>Sign up</button>
+        <button onClick={login}>Login</button>
+      </div>
     </div>
   )
 }
