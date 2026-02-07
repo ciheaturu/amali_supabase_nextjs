@@ -17,6 +17,9 @@ export default function City() {
     <div style={{ padding: 40 }}>
       <h2>City Dashboard</h2>
       <p>Total buildings: {buildings.length}</p>
+
+      <a href="/add-building">➕ Add building</a>
+
       <ul>
         {buildings.map(b => (
           <li key={b.id}>{b.name} – {b.classification}</li>
