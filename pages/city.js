@@ -35,14 +35,28 @@ export default function City() {
       <p><strong>Total buildings:</strong> {total}</p>
       <p><strong>Total occupants (approx):</strong> {totalOccupants}</p>
 
-      <h3>Buildings by type</h3>
-      <ul>
-        {Object.entries(byType).map(([type, count]) => (
-          <li key={type}>{type}: {count}</li>
-        ))}
-      </ul>
+      {/* ⬇⬇ INSERTED EXPORT BUTTON HERE ⬇⬇ */}
+      <button
+        onClick={() => {
+          const header = "name,classification,occupants,latitude,longitude\n"
+          const rows = buildings.map(b =>
+            `${b.name},${b.classification},${b.occupants},${b.latitude},${b.longitude}`
+          ).join("\n")
 
-      <br />
+          const blob = new Blob([header + rows], { type: "text/csv" })
+          const url = URL.createObjectURL(blob)
+
+          const a = document.createElement("a")
+          a.href = url
+          a.download = "city_buildings.csv"
+          a.click()
+        }}
+      >
+        ⬇ Export CSV
+      </button>
+      {/* ⬆⬆ END OF INSERTED BUTTON ⬆⬆ */}
+
+      <br /><br />
       <a href="/add-building">➕ Add building</a>
 
       <h3>All buildings</h3>
